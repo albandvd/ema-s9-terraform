@@ -22,6 +22,12 @@ module "nginx" {
 | start_port | 8000 | Premier port hôte |
 | hostname_page | true | Hostname affiché sur la page (image nginx) |
 
+## Validation
+
+- memory >= 0
+- container_count >= 1
+- start_port entre 1 et 65535
+
 ## Sorties
 
 container_names, container_ids, urls

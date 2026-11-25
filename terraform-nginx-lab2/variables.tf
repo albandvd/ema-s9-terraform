@@ -8,6 +8,11 @@ variable "memory" {
   description = "Limite mémoire des conteneurs en Mo (0 = pas de limite)"
   type        = number
   default     = 512
+
+  validation {
+    condition     = var.memory >= 0
+    error_message = "memory doit être supérieur ou égal à 0."
+  }
 }
 
 variable "privileged" {
@@ -20,6 +25,11 @@ variable "container_count" {
   description = "Nombre de conteneurs à créer"
   type        = number
   default     = 1
+
+  validation {
+    condition     = var.container_count >= 1
+    error_message = "container_count doit être au moins égal à 1."
+  }
 }
 
 variable "name_prefix" {
@@ -32,6 +42,11 @@ variable "start_port" {
   description = "Port hôte du premier conteneur ; les suivants prennent les ports suivants"
   type        = number
   default     = 8000
+
+  validation {
+    condition     = var.start_port >= 1 && var.start_port <= 65535
+    error_message = "start_port doit être compris entre 1 et 65535."
+  }
 }
 
 variable "hostname_page" {
