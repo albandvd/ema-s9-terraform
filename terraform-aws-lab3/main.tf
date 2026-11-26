@@ -1,10 +1,5 @@
-locals {
-  vpc_id    = "vpc-01b6138c71cc82aba"
-  subnet_id = "subnet-0855fbfcf29f845c3"
-}
-
 data "aws_subnet" "this" {
-  id = local.subnet_id
+  id = var.subnet_id
 }
 
 data "aws_ami" "amazon_linux" {

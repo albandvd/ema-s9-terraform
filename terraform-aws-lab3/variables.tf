@@ -1,3 +1,15 @@
+variable "region" {
+  description = "AWS region to deploy into"
+  type        = string
+  default     = "eu-west-3"
+}
+
+variable "subnet_id" {
+  description = "Subnet id to launch the ASG instances in"
+  type        = string
+  default     = "subnet-0855fbfcf29f845c3"
+}
+
 variable "instance_type" {
   description = "EC2 instance type for the lab3 instance"
   type        = string
