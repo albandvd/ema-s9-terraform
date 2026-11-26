@@ -1,7 +1,20 @@
 locals {
   vpc_id    = "vpc-01b6138c71cc82aba"
   subnet_id = "subnet-0855fbfcf29f845c3"
-  ami_id    = "ami-092c64119783c2f31"
+}
+
+data "aws_subnet" "this" {
+  id = local.subnet_id
+}
+
+data "aws_ami" "amazon_linux" {
+  owners      = ["amazon"]
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
 }
 
 resource "tls_private_key" "ssh" {
@@ -23,7 +36,7 @@ resource "local_sensitive_file" "private_key" {
 resource "aws_security_group" "ssh" {
   name        = "student9-lab3-ssh"
   description = "Allow SSH access for lab3 EC2 instance"
-  vpc_id      = local.vpc_id
+  vpc_id      = data.aws_subnet.this.vpc_id
 
   ingress {
     description = "SSH"
@@ -45,14 +58,13 @@ resource "aws_security_group" "ssh" {
   }
 }
 
-resource "aws_instance" "this" {
-  ami                    = local.ami_id
-  instance_type          = "t2.micro"
-  subnet_id              = local.subnet_id
-  key_name               = aws_key_pair.ssh.key_name
-  vpc_security_group_ids = [aws_security_group.ssh.id]
+module "instance" {
+  source = "./modules/ec2-instance"
 
-  tags = {
-    Name = "student9-lab3"
-  }
+  name               = "student9-lab3"
+  instance_type      = var.instance_type
+  ami_id             = data.aws_ami.amazon_linux.id
+  subnet_id          = data.aws_subnet.this.id
+  key_name           = aws_key_pair.ssh.key_name
+  security_group_ids = [aws_security_group.ssh.id]
 }
