@@ -1,11 +1,11 @@
-output "instance_public_ip" {
-  value = module.instance.public_ip
+output "asg_name" {
+  value = aws_autoscaling_group.this.name
 }
 
-output "instance_public_dns" {
-  value = module.instance.public_dns
+output "launch_template_id" {
+  value = aws_launch_template.this.id
 }
 
-output "ssh_command" {
-  value = "ssh -i ${local_sensitive_file.private_key.filename} ec2-user@${module.instance.public_ip}"
+output "ssh_private_key_path" {
+  value = local_sensitive_file.private_key.filename
 }
